@@ -9,8 +9,6 @@ public class FileReader {
 
 	public String read(String s) {
 
-		s = "/Users/Katarina/Documents/File.txt";
-
 		File billFile = new File(s);
 
 		byte[] content = new byte[0];
@@ -27,8 +25,6 @@ public class FileReader {
 		} catch (IOException ioe) {
 			System.out.println("Couldn't read a file called " + s);
 		}
-
-		//System.out.println(new String(content));
 		
 		return new String(content);
 	}
