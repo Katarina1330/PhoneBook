@@ -1,4 +1,4 @@
-package phoneBook.Shared.Utility;
+package phoneBookShared.Utility;
 
 public class Main {
 

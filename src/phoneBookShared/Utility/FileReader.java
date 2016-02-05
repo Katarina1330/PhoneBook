@@ -1,4 +1,4 @@
-package phoneBook.Shared.Utility;
+package phoneBookShared.Utility;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,4 +1,4 @@
-package phoneBook.Shared.Models;
+package phoneBookShared.Models;
 
 public class Person {
 
