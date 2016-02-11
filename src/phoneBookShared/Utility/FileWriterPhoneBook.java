@@ -4,12 +4,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
+
+import phoneBookShared.Models.Person;
 
 public class FileWriterPhoneBook {
 	
 	
 
-	public static void writeToFile(String fileName, String str) throws IOException{
+	public void writeToFile(String fileName, String str) throws IOException{
 		
 		creatingEmptyFile(fileName);
 		
@@ -19,9 +22,10 @@ public class FileWriterPhoneBook {
 		bw.close();
 		fw.close();
 		
+		
 	}
 	
-	public static void creatingEmptyFile(String fileName){
+	public void creatingEmptyFile(String fileName){
 		
 		File myFile = new File(fileName);
 		try{
