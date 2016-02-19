@@ -31,7 +31,19 @@ public class XmlSerializer {
 	        }
 	        final ByteArrayInputStream bin = new ByteArrayInputStream( s.getBytes() );
 	        final XMLDecoder decoder = new XMLDecoder( bin );
-	        return (List<Person>) decoder.readObject();
+	        List<Person> persons = null;
+	        
+	        try {
+	        	persons = (List<Person>) decoder.readObject();
+	        }
+	        catch (Exception ex) {
+	        	
+	        }
+	        finally {
+	        	decoder.close();
+	        }
+	        
+	        return persons;
 	}
 
 	

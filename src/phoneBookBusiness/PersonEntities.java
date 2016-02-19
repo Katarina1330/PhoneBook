@@ -7,7 +7,9 @@ import phoneBookShared.Models.Person;
 public class PersonEntities {
 
 	
-	public static PersonEntities getAllPerson;
+	private static PersonEntities instance = null;
+	
+	public List<Person> AllPersons;
 	
 	protected PersonEntities(){
 		
@@ -16,10 +18,10 @@ public class PersonEntities {
 	
 	public static PersonEntities getInstance(){
 		
-		if(getAllPerson == null) {
-			getAllPerson = new PersonEntities();
+		if(instance == null) {
+			instance = new PersonEntities();
 		}
 		
-		return getAllPerson;
+		return instance;
 	}
 }
