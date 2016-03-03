@@ -223,10 +223,10 @@ public class UserInterface {
 		textHomePhone.setText("N/A");
 	}
 	
-	private void getUiElements(){
+	private Person getUiElements(){
 		
 		Person p = new Person();
-//		setUiElements(p);
+		setUiElements(p);
 		
 		textFirstName.getText();
 		textLastName.getText();
@@ -235,7 +235,7 @@ public class UserInterface {
 		textHomePhone.getText();
 		
 	
-//		return p;
+		return p;
 	}
 
 	@SuppressWarnings("unused")
