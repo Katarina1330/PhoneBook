@@ -226,15 +226,21 @@ public class UserInterface {
 	private Person getUiElements(){
 		
 		Person p = new Person();
-		setUiElements(p);
 		
+		// This line below is not correct! If you execute this line it will set object p to UI. You dont need to do that.
+		setUiElements(p); // Because p is empty (fields are empty) you will assign nothing to text boxes.
+		
+		// Below you are only calling grtText() which returns value, but you are not assigning that value to anybody!
 		textFirstName.getText();
 		textLastName.getText();
 		textType.getText();
 		textCellPhone.getText();
 		textHomePhone.getText();
 		
+		// You should assign value from text box like in below:
+		p.FirstName = textFirstName.getText(); // This line will read velue from textbox textFirstName and assign to p.FirstName.
 	
+		// Because you didn't assign any value to fields it will be empty!
 		return p;
 	}
 
