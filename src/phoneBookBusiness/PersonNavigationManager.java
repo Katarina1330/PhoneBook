@@ -7,6 +7,7 @@ import phoneBookShared.Models.Person;
 
 public class PersonNavigationManager {
 
+	// Zaboraviiiii, zaboraviiiii da si je ikad koristila luuudoooo...
 	public void initialize(){
 		
 		PersonDataAccess dataAccess = new PersonDataAccess();
@@ -19,7 +20,8 @@ public class PersonNavigationManager {
 	
 	public Person getFirst(){
 		
-		List<Person> allPersons = PersonEntities.getInstance().AllPersons;
+		PersonDataAccess dataAccess = new PersonDataAccess();
+		List<Person> allPersons = dataAccess.read();
 		
 		return allPersons.get(0);	
 	}

@@ -21,7 +21,7 @@ public class PersonDataAccess {
 		return persons;
 	}
 	
-	public void create(List<Person> p) throws IOException{
+	public void write(List<Person> p) throws IOException{
 		
 		XmlSerializer xs = new XmlSerializer();
 		String resalt = xs.serialize(p);

@@ -9,7 +9,7 @@ public class PersonEntities {
 	
 	private static PersonEntities instance = null;
 	
-	public List<Person> AllPersons;
+	public List<Person> AllPersons ;
 	
 	protected PersonEntities(){
 		

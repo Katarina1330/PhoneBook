@@ -150,16 +150,12 @@ public class UserInterface {
 		
 		// Ovde kreiramo instancu objekta tipa PersonNavigationManager
 		PersonNavigationManager personNavigationManager = new PersonNavigationManager();
-		// Ovde pozivam metodu initialize() koja inicijalizuje personEntitis
-		personNavigationManager.initialize();
 		
 		// Metod getFirst() nam vraca prvi kontakt iz imenika 
 		Person firstPerson = personNavigationManager.getFirst();
 		
 		// Prosledjujemo prvi kontakt metodi mapElements() koja postavlja vrednosti textBox-ova.
 		setUiElements(firstPerson);
-		
-		getUiElements();
 		
 		shell.setText("PhoneBook");
 		shell.pack();
@@ -205,13 +201,6 @@ public class UserInterface {
 		button.setLayoutData(Data);
 	}
 	
-
-//	private void onSelected(Combo combo) {
-//
-//		label.setText(combo.getText());
-//		label.pack();
-//	}
-	
 	private void setUiElements(Person p){
 		// Ovaj metod dobija kao argument objekat tipa Person i njegove fildove(vrednosti iz fildova) dodeljuje textBox-ovima.
 		// TexBox-ovi su dostupni u ovoj metodi zato sto su globalni, tj. zato sto su deklarisani u klasi i mogu se videti u citavoj klasi.
@@ -225,22 +214,15 @@ public class UserInterface {
 	
 	private Person getUiElements(){
 		
+		// Kreiramo instancu objekta
 		Person p = new Person();
 		
-		// This line below is not correct! If you execute this line it will set object p to UI. You dont need to do that.
-		setUiElements(p); // Because p is empty (fields are empty) you will assign nothing to text boxes.
+		// Fildu objekta p dodeljujem vrednost iz tekst boksa:
+		p.firstName = textFirstName.getText(); 
+		p.lastName = textLastName.getText();
+		p.cellPhone = textCellPhone.getText();
 		
-		// Below you are only calling grtText() which returns value, but you are not assigning that value to anybody!
-		textFirstName.getText();
-		textLastName.getText();
-		textType.getText();
-		textCellPhone.getText();
-		textHomePhone.getText();
-		
-		// You should assign value from text box like in below:
-		p.FirstName = textFirstName.getText(); // This line will read velue from textbox textFirstName and assign to p.FirstName.
-	
-		// Because you didn't assign any value to fields it will be empty!
+		// Vraca objekat p sa dodeljenim vrednostima.
 		return p;
 	}
 
@@ -250,9 +232,6 @@ public class UserInterface {
 		Display display = new Display();
 		UserInterface us = new UserInterface(display);
 		display.dispose();
-		
-		
-		
 	}
 
 }
