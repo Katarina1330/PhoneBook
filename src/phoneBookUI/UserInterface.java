@@ -157,7 +157,9 @@ public class UserInterface {
 		Person firstPerson = personNavigationManager.getFirst();
 		
 		// Prosledjujemo prvi kontakt metodi mapElements() koja postavlja vrednosti textBox-ova.
-		mapElements(firstPerson);
+		setUiElements(firstPerson);
+		
+		getUiElements();
 		
 		shell.setText("PhoneBook");
 		shell.pack();
@@ -210,7 +212,7 @@ public class UserInterface {
 //		label.pack();
 //	}
 	
-	private void mapElements(Person p){
+	private void setUiElements(Person p){
 		// Ovaj metod dobija kao argument objekat tipa Person i njegove fildove(vrednosti iz fildova) dodeljuje textBox-ovima.
 		// TexBox-ovi su dostupni u ovoj metodi zato sto su globalni, tj. zato sto su deklarisani u klasi i mogu se videti u citavoj klasi.
 		
@@ -219,8 +221,21 @@ public class UserInterface {
 		textType.setText("N/A");
 		textCellPhone.setText(p.cellPhone);
 		textHomePhone.setText("N/A");
+	}
+	
+	private void getUiElements(){
 		
+		Person p = new Person();
+//		setUiElements(p);
 		
+		textFirstName.getText();
+		textLastName.getText();
+		textType.getText();
+		textCellPhone.getText();
+		textHomePhone.getText();
+		
+	
+//		return p;
 	}
 
 	@SuppressWarnings("unused")
@@ -229,6 +244,7 @@ public class UserInterface {
 		Display display = new Display();
 		UserInterface us = new UserInterface(display);
 		display.dispose();
+		
 		
 		
 	}
