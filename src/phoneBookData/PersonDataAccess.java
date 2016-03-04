@@ -27,7 +27,7 @@ public class PersonDataAccess {
 		String resalt = xs.serialize(p);
 		
 		FileWriterPhoneBook fw = new FileWriterPhoneBook();
-		fw.writeToFile("/Users/Katarina/Documents/FileWrite2.txt", resalt);
+		fw.writeToFile("/Users/Katarina/Documents/FileWrite.txt", resalt);
 	}
 
 }

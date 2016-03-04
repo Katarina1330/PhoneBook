@@ -7,22 +7,20 @@ import phoneBookShared.Models.Person;
 
 public class PersonNavigationManager {
 
-	// Zaboraviiiii, zaboraviiiii da si je ikad koristila luuudoooo...
-	public void initialize(){
-		
-		PersonDataAccess dataAccess = new PersonDataAccess();
-		List<Person> allPersons = dataAccess.read();
-		
-		//PersonEntities.getInstance().AllPersons = allPersons;
-		PersonEntities entities = PersonEntities.getInstance();
-		entities.AllPersons = allPersons;
-	}
+	
 	
 	public Person getFirst(){
 		
 		PersonDataAccess dataAccess = new PersonDataAccess();
 		List<Person> allPersons = dataAccess.read();
 		
-		return allPersons.get(0);	
+		// Ovde proveravamo da li allPersons sadrzi neke podatke ili je jednako null
+		if(allPersons != null){
+			// Ako nije null, onda cemo vratiti prvi prson sa liste
+			return allPersons.get(0);
+		}
+		
+		// Ukoliko je allPersons null onda vracamo prazan objekat 
+		return new Person();	
 	}
 }

@@ -1,5 +1,7 @@
 package phoneBookUI;
 
+import java.io.IOException;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
@@ -8,9 +10,13 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import phoneBookBusiness.PersonDataManager;
 import phoneBookBusiness.PersonNavigationManager;
 import phoneBookShared.Models.Person;
 
@@ -124,9 +130,22 @@ public class UserInterface {
 		cancleBtn.setText("Cancel");
 		setStylesRightButtons(cancleBtn, 40);
 
+		// Procitaj: Button event handler ili Button Listener SWT java
 		saveBtn = new Button(shell, SWT.PUSH);
 		saveBtn.setText("Save");
 		setStylesRightButtons(saveBtn, 50);
+		saveBtn.addListener(SWT.Selection, new Listener() {
+			 public void handleEvent(Event e) {
+			     
+				 // e je objekat koji prestavlja dagadjaj, njega salje automacki java negde u pozadini
+				 // Ako je e.type == SWT.selection onda ce se izvrsiti medoda createNew.
+				 if(e.type == SWT.Selection) {
+					 
+					 createNew();
+				 }
+				 
+			 }
+		});
 
 		createNewBtn = new Button(shell, SWT.PUSH);
 		createNewBtn.setText("Create New");
@@ -168,6 +187,15 @@ public class UserInterface {
 			}
 		}
 
+	}
+	
+	private void createNew() {
+	
+		// Ovde kupimo podatke sa UI forme i konvertujemo u Person objekat.
+		Person uiData = getUiElements();
+		
+		PersonDataManager dataManager = new PersonDataManager();
+		dataManager.create(uiData);
 	}
 
 	private void setStylesLabel(Label label, int x, int y) {

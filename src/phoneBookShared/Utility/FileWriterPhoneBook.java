@@ -11,8 +11,13 @@ public class FileWriterPhoneBook {
 
 	public void writeToFile(String fileName, String str) throws IOException{
 		
-		creatingEmptyFile(fileName);
+		// Proveravamo da li fajl vec postoji, ako ne postoji mi cemo ga kreirat.
+		File f = new File(fileName);
+		if(f.exists() && !f.isDirectory()) { 
+			creatingEmptyFile(fileName);
+		}
 		
+		// Upisujemo sadrzaj u fajl
 		FileWriter fw = new FileWriter(fileName);
 		BufferedWriter bw = new BufferedWriter(fw);
 		bw.write(str);
