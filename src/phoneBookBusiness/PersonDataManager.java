@@ -19,8 +19,15 @@ public class PersonDataManager {
 		List<Person> allPerson = dataAccess.read();
 		
 		// Proveravamo da li je allPerson == null, ako je null onda cemo dodeliti praznu listu
+		// Ako je allPerson null , to znaci da nemamo nikog u bazi. Ako nemamo nikog u bazi onda ce person prvi biti.
+		// Posto je person prvi , negov id ce biti jedan.
 		if(allPerson == null){
 			allPerson = new ArrayList<Person>();
+			person.id = 1;
+		} else {
+			// Ako allPerson nije null to znaci da id novog person-a mora biti veci od id zadnjeg person-a u bazi.
+			Person last = allPerson.get(allPerson.size() - 1);
+			person.id = last.id + 1;
 		}
 		// Ovde dodajemo novi kontakt postojecim kontaktima.
 		allPerson.add(person);
@@ -30,7 +37,6 @@ public class PersonDataManager {
 		try {
 			dataAccess.write(allPerson);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

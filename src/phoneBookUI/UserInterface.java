@@ -44,6 +44,8 @@ public class UserInterface {
 	private Text textCellPhone;
 	private Text textHomePhone;
 	
+	private static int selectedPersonID;
+	
 
 	// TODO: Remove unused import
 	// Provide appropriate names for all variables ( Don't use abbreviations).
@@ -162,6 +164,19 @@ public class UserInterface {
 		nextBtn = new Button(shell, SWT.PUSH);
 		nextBtn.setText("Next");
 		setStylesBottomButtons(nextBtn, 80, 30, 160);
+		nextBtn.addListener(SWT.Selection, new Listener() {
+			 public void handleEvent(Event e) {
+			     
+				 // e je objekat koji prestavlja dagadjaj, njega salje automacki java negde u pozadini
+				 // Ako je e.type == SWT.selection onda ce se izvrsiti medoda createNew.
+				 if(e.type == SWT.Selection) {
+					 
+					 getNext();
+				 }
+				 
+			 }
+		});
+
 
 		lastBtn = new Button(shell, SWT.PUSH);
 		lastBtn.setText("Last");
@@ -189,6 +204,14 @@ public class UserInterface {
 
 	}
 	
+	protected void getNext() {
+		
+		PersonNavigationManager personNavigationManager = new PersonNavigationManager();
+		Person nextPerson = personNavigationManager.getNext(selectedPersonID);
+		
+		setUiElements(nextPerson);
+	}
+
 	private void createNew() {
 	
 		// Ovde kupimo podatke sa UI forme i konvertujemo u Person objekat.
@@ -233,6 +256,7 @@ public class UserInterface {
 		// Ovaj metod dobija kao argument objekat tipa Person i njegove fildove(vrednosti iz fildova) dodeljuje textBox-ovima.
 		// TexBox-ovi su dostupni u ovoj metodi zato sto su globalni, tj. zato sto su deklarisani u klasi i mogu se videti u citavoj klasi.
 		
+		selectedPersonID = p.id;
 		textFirstName.setText(p.firstName);
 		textLastName.setText(p.lastName);
 		textType.setText("N/A");
