@@ -15,7 +15,7 @@ public class PersonNavigationManager {
 		List<Person> allPersons = dataAccess.read();
 		
 		// Ovde proveravamo da li allPersons sadrzi neke podatke ili je jednako null
-		if(allPersons != null){
+		if(allPersons != null && !allPersons.isEmpty()){
 			// Ako nije null, onda cemo vratiti prvi prson sa liste
 			return allPersons.get(0);
 		}
@@ -40,7 +40,9 @@ public class PersonNavigationManager {
 		return null;
 	}
 	
+	
 	public Person getPrevious(int id){
+
 		
 		PersonDataAccess personDataAccess = new PersonDataAccess();
 		List<Person> allPersons = personDataAccess.read();
@@ -51,6 +53,23 @@ public class PersonNavigationManager {
 			if(current.id == id && i > 0){
 				 return allPersons.get(i - 1);
 			}
+		}
+		
+		return null;
+	}
+	
+	public Person getLast(){
+		
+		PersonDataAccess personDataAccess = new PersonDataAccess();
+		List<Person> allPersons = personDataAccess.read();
+		
+		// Proveravamo da li je list null i da li je prazna.
+		// Ako je allPersons null nastace greska jer ne mozemo iz nicega da pozovemo metode.
+		// Proveravamo da li je lista prazna jer ako je prazna lastIndex ce biti -1. Ako je lastIndex -1 nastace greska kad ge prosledimo medodi get.
+		
+		if(allPersons != null && !allPersons.isEmpty()){  // allPersons.size() > 0;
+			int lastIndex = allPersons.size() - 1;
+			return allPersons.get(lastIndex);
 		}
 		
 		return null;

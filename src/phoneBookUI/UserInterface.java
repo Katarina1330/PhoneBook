@@ -83,25 +83,6 @@ public class UserInterface {
 		 textType = new Text(shell, SWT.SINGLE);
 		 setStylesText(textType, 24, 24);
 
-//		 FormLayout layout = new FormLayout();
-//		 layout.marginLeft = 50;
-//		 layout.marginTop = 30;
-//		 layout.spacing = 30;
-//		 shell.setLayout(layout);
-//		
-//		 Combo combo = new Combo(shell, SWT.DROP_DOWN);
-//		 combo.add("Ubuntu");
-//		 combo.add("Fedora");
-//		 combo.add("Arch");
-//		 combo.add("Red Hat");
-//		 combo.add("Mint");
-//		 combo.setLayoutData(new RowData(150, -1));
-//
-//		 label = new Label(shell, SWT.LEFT);
-//		 label.setText("...");
-//
-//		 combo.addListener(SWT.Selection, event -> onSelected(combo));
-
 		lblCellPhone = new Label(shell, SWT.LEFT);
 		lblCellPhone.setText("Cell Phone");
 		setStylesLabel(lblCellPhone, 31, 31);
@@ -122,12 +103,17 @@ public class UserInterface {
 		deleteBtn = new Button(shell, SWT.BORDER);
 		deleteBtn.setText("Delete");
 		setStylesRightButtons(deleteBtn, 10);
+		deleteBtn.addListener(SWT.Selection, new Listener() {
+			 public void handleEvent(Event e) {
+			     
+				 if(e.type == SWT.Selection) {
+					 
+					 deleteSelected();
+				 }
+				 
+			 }
+		});
 		 
-      // Color red = display.getSystemColor(SWT.COLOR_RED);
-
-		//TableItem item = new TableItem(deleteBtn, SWT.NONE);
-//	    item.setBackground(red);
-       
 		cancleBtn = new Button(shell, SWT.PUSH);
 		cancleBtn.setText("Cancel");
 		setStylesRightButtons(cancleBtn, 40);
@@ -156,10 +142,32 @@ public class UserInterface {
 		firstBtn = new Button(shell, SWT.PUSH);
 		firstBtn.setText("First");
 		setStylesBottomButtons(firstBtn, 60, 30, 0);
+		firstBtn.addListener(SWT.Selection, new Listener() {
+			 public void handleEvent(Event e) {
+			     
+				 if(e.type == SWT.Selection) {
+					 
+					 moveFirst();
+				 }
+				 
+			 }
+		});
 
 		previousBtn = new Button(shell, SWT.PUSH);
 		previousBtn.setText("Previous");
 		setStylesBottomButtons(previousBtn, 80, 30, 90);
+		previousBtn.addListener(SWT.Selection, new Listener() {
+			 public void handleEvent(Event e) {
+			     
+				 // e je objekat koji prestavlja dagadjaj, njega salje automacki java negde u pozadini
+				 // Ako je e.type == SWT.selection onda ce se izvrsiti medoda createNew.
+				 if(e.type == SWT.Selection) {
+					 
+					 movePrevious();
+				 }
+				 
+			 }
+		});
 
 		nextBtn = new Button(shell, SWT.PUSH);
 		nextBtn.setText("Next");
@@ -177,10 +185,19 @@ public class UserInterface {
 			 }
 		});
 
-
 		lastBtn = new Button(shell, SWT.PUSH);
 		lastBtn.setText("Last");
 		setStylesBottomButtons(lastBtn, 60, 30, 230);
+		lastBtn.addListener(SWT.Selection, new Listener() {
+			 public void handleEvent(Event e) {
+			     
+				 if(e.type == SWT.Selection) {
+					 
+					 moveLast();
+				 }
+				 
+			 }
+		});
 		
 		// Ovde kreiramo instancu objekta tipa PersonNavigationManager
 		PersonNavigationManager personNavigationManager = new PersonNavigationManager();
@@ -204,6 +221,45 @@ public class UserInterface {
 
 	}
 	
+	protected void moveFirst() {
+		PersonNavigationManager personNavigationManager = new PersonNavigationManager();
+		Person nextPerson = personNavigationManager.getFirst();
+		
+		setUiElements(nextPerson);
+	}
+
+	protected void deleteSelected() {
+		
+		PersonNavigationManager personNavigationManager = new PersonNavigationManager();
+		Person nextPerson = personNavigationManager.getNext(selectedPersonID);
+		
+		PersonDataManager personDataManager = new PersonDataManager();
+		personDataManager.delete(selectedPersonID);
+		
+		if(nextPerson == null){
+			Person emptyPerson = new Person();
+			setUiElements(emptyPerson);
+		} else {
+			setUiElements(nextPerson);
+		}
+		
+	}
+
+	protected void moveLast() {
+		PersonNavigationManager personNavigationManager = new PersonNavigationManager();
+		Person lastPerson = personNavigationManager.getLast();
+		
+		setUiElements(lastPerson);
+	}
+
+	protected void movePrevious() {
+		
+		PersonNavigationManager personNavigationManager = new PersonNavigationManager();
+		Person previousPerson = personNavigationManager.getPrevious(selectedPersonID);
+		
+		setUiElements(previousPerson);
+	}
+
 	protected void getNext() {
 		
 		PersonNavigationManager personNavigationManager = new PersonNavigationManager();
@@ -218,7 +274,7 @@ public class UserInterface {
 		Person uiData = getUiElements();
 		
 		PersonDataManager dataManager = new PersonDataManager();
-		dataManager.create(uiData);
+		selectedPersonID = dataManager.create(uiData);
 	}
 
 	private void setStylesLabel(Label label, int x, int y) {
@@ -256,12 +312,16 @@ public class UserInterface {
 		// Ovaj metod dobija kao argument objekat tipa Person i njegove fildove(vrednosti iz fildova) dodeljuje textBox-ovima.
 		// TexBox-ovi su dostupni u ovoj metodi zato sto su globalni, tj. zato sto su deklarisani u klasi i mogu se videti u citavoj klasi.
 		
-		selectedPersonID = p.id;
-		textFirstName.setText(p.firstName);
-		textLastName.setText(p.lastName);
-		textType.setText("N/A");
-		textCellPhone.setText(p.cellPhone);
-		textHomePhone.setText("N/A");
+		if(p != null){
+		// Inverzni if izvrsava se samo ako je p razlicito od nule, zato se zove inverzni if jer trazi razlicitost a ne jednakost.
+			
+			selectedPersonID = p.id;
+			textFirstName.setText(p.firstName);
+			textLastName.setText(p.lastName);
+			textType.setText("N/A");
+			textCellPhone.setText(p.cellPhone);
+			textHomePhone.setText("N/A");
+		} 
 	}
 	
 	private Person getUiElements(){

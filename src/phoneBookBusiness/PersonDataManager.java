@@ -10,7 +10,7 @@ import phoneBookShared.Models.Person;
 // Ova klasa sluzi da vrsi izmene na Person podacima
 public class PersonDataManager {
 
-	public void create(Person person) {
+	public int create(Person person) {
 		
 		// Kreiramo objekat tipa PersonDataAccess koji nam obezbedjuje funkcionlnosti citanja iz baze i pisanja u bazu.
 		PersonDataAccess dataAccess = new PersonDataAccess();
@@ -21,7 +21,7 @@ public class PersonDataManager {
 		// Proveravamo da li je allPerson == null, ako je null onda cemo dodeliti praznu listu
 		// Ako je allPerson null , to znaci da nemamo nikog u bazi. Ako nemamo nikog u bazi onda ce person prvi biti.
 		// Posto je person prvi , negov id ce biti jedan.
-		if(allPerson == null){
+		if(allPerson == null || allPerson.isEmpty()){
 			allPerson = new ArrayList<Person>();
 			person.id = 1;
 		} else {
@@ -36,6 +36,28 @@ public class PersonDataManager {
 		// Novi podaci su: stari + novi Person
 		try {
 			dataAccess.write(allPerson);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return person.id;
+	}
+
+	public void delete(int id) {
+		
+		PersonDataAccess personDataAccess = new PersonDataAccess();
+		List<Person> allPersons = personDataAccess.read();
+		
+		for (int i = 0; i < allPersons.size(); i++) {
+			
+			if(allPersons.get(i).id == id) {
+				allPersons.remove(i);
+				break;
+			}
+		}
+		
+		try {
+			personDataAccess.write(allPersons);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
