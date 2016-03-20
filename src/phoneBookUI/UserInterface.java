@@ -37,6 +37,8 @@ public class UserInterface {
 	private Button previousBtn;
 	private Button nextBtn;
 	private Button lastBtn;
+	private Button upDateBtn;
+	private Button saveUpdateBtn;
 	
 	private Text textFirstName;
 	private Text textLastName;
@@ -45,13 +47,10 @@ public class UserInterface {
 	private Text textHomePhone;
 	
 	private static int selectedPersonID;
-	
+	private Person createSessionPerson;
+	private Boolean isUpdate;
 
-	// TODO: Remove unused import
-	// Provide appropriate names for all variables ( Don't use abbreviations).
-	// Put all form elements to be global in class.
-	// Apply styles according to phonBook schema
-	// Create Map method.
+	
 	public UserInterface(Display display) {
 		initUI(display);
 	}
@@ -59,7 +58,6 @@ public class UserInterface {
 	public void initUI(Display display) {
 
 		Shell shell = new Shell(display, SWT.SHELL_TRIM | SWT.CENTER);
-		//shell.setLayout(new FormLayout());
 		shell.setLayout(new FillLayout());
 
 		lblFirstName = new Label(shell, SWT.LEFT);
@@ -110,15 +108,31 @@ public class UserInterface {
 					 
 					 deleteSelected();
 				 }
-				 
 			 }
 		});
 		 
 		cancleBtn = new Button(shell, SWT.PUSH);
 		cancleBtn.setText("Cancel");
 		setStylesRightButtons(cancleBtn, 40);
-
-		// Procitaj: Button event handler ili Button Listener SWT java
+		cancleBtn.setVisible(false);
+		cancleBtn.addListener(SWT.Selection, new Listener() {
+			 public void handleEvent(Event e) {
+			     
+				 if(e.type == SWT.Selection) {
+					 
+					 saveBtn.setVisible(false);
+					 cancleBtn.setVisible(false);
+					 createNewBtn.setEnabled(true);
+					 
+					 setUiElements(createSessionPerson);
+					 
+					 //saveUpdateBtn.setVisible(false);
+					 upDateBtn.setEnabled(true);
+				 }
+				 
+			 }
+		});
+		
 		saveBtn = new Button(shell, SWT.PUSH);
 		saveBtn.setText("Save");
 		setStylesRightButtons(saveBtn, 50);
@@ -128,17 +142,102 @@ public class UserInterface {
 				 // e je objekat koji prestavlja dagadjaj, njega salje automacki java negde u pozadini
 				 // Ako je e.type == SWT.selection onda ce se izvrsiti medoda createNew.
 				 if(e.type == SWT.Selection) {
-					 
-					 createNew();
-				 }
-				 
+					
+					 if(isUpdate == false){
+						 // Pozivam metodu koja kreira novi kontakt tako sto uzima podatke sa forme i prosledjuje bazi.
+						 createNew();
+						 
+						 // Ovde sakrivamo save i cancel dugmice.
+						 saveBtn.setVisible(false);
+						 cancleBtn.setVisible(false);
+						 // Ovde enejblujemo(osposobljavamo ga da radi) dugme createNewBtn.
+						 createNewBtn.setEnabled(true);
+						 upDateBtn.setEnabled(true);
+					 } else if(isUpdate == true) {
+						 
+						   updateSelected();
+							
+						   saveBtn.setVisible(false);
+						   cancleBtn.setVisible(false);
+						   upDateBtn.setEnabled(true);
+						   createNewBtn.setEnabled(true);
+					 }
+				 } 
 			 }
 		});
+		saveBtn.setVisible(false);
 
 		createNewBtn = new Button(shell, SWT.PUSH);
 		createNewBtn.setText("Create New");
 		setStylesRightButtons(createNewBtn, 60);
-
+		createNewBtn.addListener(SWT.Selection, new Listener(){
+			public void handleEvent(Event e) {
+			     
+				 if(e.type == SWT.Selection) {
+					 
+					 isUpdate = false;
+					 
+					 // Ovde pravimo dugmad save i cancel da budu vidljivi.
+					 saveBtn.setVisible(true);
+					 cancleBtn.setVisible(true);
+					 // Ovde radimo disejbl(onemogucuje mu se rad)  dugmeta create.
+					 createNewBtn.setEnabled(false);
+					 upDateBtn.setEnabled(false);
+					 
+					 // Ovde setujemo trenutne podatke sa forme( Person) u globalnu varijablu koju cemo posle koristiti.
+					 createSessionPerson = new Person();         // U ovom segmentu mi citamo elemente sa forme i dodeljujemo globalnoj varijabli. 
+					 createSessionPerson = getUiElements();      // To bi mogli da uradimo i ovako: createSessionPerson = getUiElements();
+//					 createSessionPerson.firstName = textFirstName.getText();
+//					 createSessionPerson.lastName = textLastName.getText();
+//					 createSessionPerson.cellPhone = textCellPhone.getText();
+//					 createSessionPerson.id = selectedPersonID;
+					 
+					 // Ovde setujemo UI elements da budu prazni.
+					 // Kao parametar metodi prosledjijemo prazan objekat.
+					 setUiElements(new Person());
+				 }
+			}
+		});
+		
+//		saveUpdateBtn = new Button(shell, SWT.PUSH);
+//		saveUpdateBtn.setText("Save");
+//		setStylesRightButtons(saveUpdateBtn, 50);
+//		saveUpdateBtn.addListener(SWT.Selection, new Listener(){
+//			public void handleEvent(Event e) {
+//				
+//				if(e.type == SWT.Selection){
+//					
+//					updateSelected();
+//					
+//					saveUpdateBtn.setVisible(false);
+//					cancleBtn.setVisible(false);
+//					upDateBtn.setVisible(true);
+//				}
+//			}
+//		});
+//		saveUpdateBtn.setVisible(false);
+		
+		
+		upDateBtn = new Button(shell, SWT.PUSH);
+		upDateBtn.setText("UpDate");
+		setStylesRightButtons(upDateBtn, 70);
+		upDateBtn.addListener(SWT.Selection, new Listener(){
+			public void handleEvent(Event e) {
+			     
+				 if(e.type == SWT.Selection) {
+					// Pozivam metodu koja ce abdejtovati selektovani kontakt.
+					//updateSelected();
+					 
+					 isUpdate = true;
+					 
+					 saveBtn.setVisible(true);
+					 cancleBtn.setVisible(true);
+					 upDateBtn.setEnabled(false);
+					 createNewBtn.setEnabled(false);
+				 }
+			}
+		});
+		
 		firstBtn = new Button(shell, SWT.PUSH);
 		firstBtn.setText("First");
 		setStylesBottomButtons(firstBtn, 60, 30, 0);
@@ -221,6 +320,24 @@ public class UserInterface {
 
 	}
 	
+	protected void updateSelected() {
+		
+		// Kreiramo novi objekat tipa Person i dodeljujemo vrednosti iz textboksova i id.
+		Person uiData = new Person();
+		uiData.firstName = textFirstName.getText(); // Ovde fildu firstName dodeljujemo tekst iz tekstboks firstName.
+		uiData.lastName = textLastName.getText();   // Ovde i u sledecim primerima radimo slicno.
+		uiData.cellPhone = textCellPhone.getText();
+		uiData.id = selectedPersonID;
+		//Person uiData = getUiElements();
+		
+		// Kreiramo novu instncu personDataMenager koji obezbedjuje funkcionalnosti(metode) za izmene podataka.
+		PersonDataManager personDataManager = new PersonDataManager();
+		// Ovde pozivamo metodu upData i prosledjujemo varijablu uiData.
+		// uiData je tipa person i u njemu se cuvaju podaci sa forme. Mi ustvari saljemo podatke sa forme.
+		personDataManager.upDate(uiData);
+		
+	}
+
 	protected void moveFirst() {
 		PersonNavigationManager personNavigationManager = new PersonNavigationManager();
 		Person nextPerson = personNavigationManager.getFirst();
@@ -275,6 +392,8 @@ public class UserInterface {
 		
 		PersonDataManager dataManager = new PersonDataManager();
 		selectedPersonID = dataManager.create(uiData);
+		
+		
 	}
 
 	private void setStylesLabel(Label label, int x, int y) {
@@ -333,6 +452,7 @@ public class UserInterface {
 		p.firstName = textFirstName.getText(); 
 		p.lastName = textLastName.getText();
 		p.cellPhone = textCellPhone.getText();
+		p.id = selectedPersonID;
 		
 		// Vraca objekat p sa dodeljenim vrednostima.
 		return p;

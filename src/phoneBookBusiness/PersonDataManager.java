@@ -62,4 +62,35 @@ public class PersonDataManager {
 			e.printStackTrace();
 		}
 	}
+	
+	// Metoda vrsi update postojeceg kontakta. 
+	// Kao parametar prima Person objekat koji sadrzi nove podatke i oni ce biti insertovani na mestu odgovarajuceg starog objekta. 
+	public void upDate(Person p){
+		
+		// Kreiramo personDataAccess objekat koji obezbedjuje funkcionalnosti(metode) za pisanje i citanje iz baze. 
+		PersonDataAccess personDataAccess = new PersonDataAccess();
+		// Ovde citamo sve Persone iz baze sa metodom read.
+		List<Person> allPerson = personDataAccess.read();
+		
+		
+		// Sada prolazimo kroz sve elemente kolekcije Person u potrazi za odgovarajucim objektom.
+		for (int i = 0; i < allPerson.size(); i++) {
+			// Ovaj uslov ce biti tacan kada id objekta iz kolekcije bude jednak id-ju objekta kog smo poslali iz UI.
+			// Posto se radi update mi moramo da nadjemo isti kontakt koji je poslat sa UI i to se radi preko id-a. 
+			if(allPerson.get(i).id == p.id) {
+				// Kada smo nasli kontakt koji ima isti id onda uzimamo indeks na kojem se on nalazi u kolekciji.
+				// Onda pozivamo metod set koji ce ubaciti novi objekat Person na mestu starog.
+				// Cilj je prakticno da se nadje indeks starog objekta kako bi se on zamenio sa novim objektom.
+				allPerson.set(i, p);
+				break;
+			}
+		}
+		
+		try {
+			// Ovde sada upisujemo u bazu kolekciju koju smo modifikovali.
+			personDataAccess.write(allPerson);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
