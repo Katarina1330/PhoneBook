@@ -1,5 +1,6 @@
 package phoneBookUI;
 
+import java.awt.List;
 import java.io.IOException;
 
 import org.eclipse.swt.SWT;
@@ -294,7 +295,6 @@ public class UserInterface {
 					 
 					 moveLast();
 				 }
-				 
 			 }
 		});
 		
@@ -392,8 +392,6 @@ public class UserInterface {
 		
 		PersonDataManager dataManager = new PersonDataManager();
 		selectedPersonID = dataManager.create(uiData);
-		
-		
 	}
 
 	private void setStylesLabel(Label label, int x, int y) {
